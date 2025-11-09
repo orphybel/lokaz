@@ -19,7 +19,7 @@ const VideosSection = () => {
       videoId: 'tOp3EK7AZbk',
     },
     {
-      title: 'LokaZ Millau 1 Août 2022 Baila Morena',
+      title: 'LokaZ Millau 1 Août 2022  Baila Morena',
       thumbnail: 'https://i.ytimg.com/vi/skIlb7jcl-E/hqdefault.jpg',
       videoId: 'skIlb7jcl-E',
     },
