@@ -65,7 +65,7 @@ ${message}
 Envoyé depuis le site web Lokaz
     `;
 
-    const emailRecipient = 'contact@lokaz.fr';
+    const emailRecipient = 'legroupe@lokaz.net';
     
     console.log('Email would be sent to:', emailRecipient);
     console.log('Email content:', emailBody);
