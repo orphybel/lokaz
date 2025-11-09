@@ -91,7 +91,7 @@ const ContactSection = () => {
                 <div>
                   <h4 className="font-semibold text-gray-100 mb-1">Facebook</h4>
                   <a
-                    href="https://facebook.com"
+                    href="https://www.facebook.com/Legroupe-Lokaz"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#c0392b] hover:text-[#a02e23] transition-colors inline-flex items-center"
