@@ -12,6 +12,8 @@ interface ContactMessage {
   message: string;
 }
 
+const RESEND_API_KEY = 're_jizQQBwy_CHAaTp7KLsB24Av8zxcb4P1M';
+
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, {
@@ -52,23 +54,52 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const emailBody = `
-Nouveau message de contact reçu:
+    const emailResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: 'Lokaz Contact <onboarding@resend.dev>',
+        to: ['legroupe@lokaz.net'],
+        subject: `Nouveau message de ${name}`,
+        html: `
+          <h2>Nouveau message de contact</h2>
+          <p><strong>Nom:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Message:</strong></p>
+          <p>${message.replace(/\n/g, '<br>')}</p>
+          <hr>
+          <p><em>Envoyé depuis le site web Lokaz</em></p>
+        `,
+      }),
+    });
 
-Nom: ${name}
-Email: ${email}
+    if (!emailResponse.ok) {
+      const errorData = await emailResponse.text();
+      console.error('Resend error:', errorData);
+      
+      await supabase
+        .from('contact_messages')
+        .update({ status: 'failed' })
+        .eq('email', email)
+        .eq('name', name);
 
-Message:
-${message}
+      return new Response(
+        JSON.stringify({ error: 'Erreur lors de l\'envoi de l\'email' }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
 
----
-Envoyé depuis le site web Lokaz
-    `;
-
-    const emailRecipient = 'legroupe@lokaz.net';
-    
-    console.log('Email would be sent to:', emailRecipient);
-    console.log('Email content:', emailBody);
+    await supabase
+      .from('contact_messages')
+      .update({ status: 'sent' })
+      .eq('email', email)
+      .eq('name', name);
 
     return new Response(
       JSON.stringify({ 

@@ -7,15 +7,41 @@ const ContactSection = () => {
     email: '',
     message: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage('');
 
-    const subject = `Message de ${formData.name}`;
-    const body = `Nom: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
-    const mailtoLink = `mailto:legroupe@lokaz.net?subject=${encodeURIComponent(subject)}&body=${body}`;
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-    window.location.href = mailtoLink;
+      const response = await fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitMessage('Message envoyé avec succès! Nous vous répondrons bientôt.');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setSubmitMessage(data.error || 'Une erreur est survenue lors de l\'envoi du message.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setSubmitMessage('Une erreur est survenue. Veuillez réessayer.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -97,6 +123,16 @@ const ContactSection = () => {
           <div className="bg-gray-700 rounded-lg p-8">
             <h3 className="text-2xl font-bold text-gray-100 mb-6">Envoyez-nous un message</h3>
 
+            {submitMessage && (
+              <div className={`mb-6 p-4 rounded-md ${
+                submitMessage.includes('succès')
+                  ? 'bg-green-900 border border-green-600 text-green-200'
+                  : 'bg-red-900 border border-red-600 text-red-200'
+              }`}>
+                {submitMessage}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2">
@@ -145,10 +181,17 @@ const ContactSection = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#c0392b] text-white px-6 py-3 rounded-md hover:bg-[#a02e23] transition-colors font-medium flex items-center justify-center"
+                disabled={isSubmitting}
+                className="w-full bg-[#c0392b] text-white px-6 py-3 rounded-md hover:bg-[#a02e23] transition-colors font-medium flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send className="h-5 w-5 mr-2" />
-                Envoyer le message
+                {isSubmitting ? (
+                  'Envoi en cours...'
+                ) : (
+                  <>
+                    <Send className="h-5 w-5 mr-2" />
+                    Envoyer le message
+                  </>
+                )}
               </button>
             </form>
           </div>
