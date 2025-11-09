@@ -15,16 +15,33 @@ const ContactSection = () => {
     setIsSubmitting(true);
     setSubmitMessage('');
 
-    const subject = encodeURIComponent(`Message de ${formData.name} depuis lokaz.net`);
-    const body = encodeURIComponent(
-      `Nom: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    );
-    const mailtoLink = `mailto:legroupe@lokaz.net?subject=${subject}&body=${body}`;
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-    window.location.href = mailtoLink;
+      const response = await fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
-    setFormData({ name: '', email: '', message: '' });
-    setIsSubmitting(false);
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitMessage('Message envoyé avec succès! Nous vous répondrons bientôt.');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setSubmitMessage(data.error || 'Une erreur est survenue lors de l\'envoi du message.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setSubmitMessage('Une erreur est survenue. Veuillez réessayer.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -107,7 +124,11 @@ const ContactSection = () => {
             <h3 className="text-2xl font-bold text-gray-100 mb-6">Envoyez-nous un message</h3>
 
             {submitMessage && (
-              <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+              <div className={`mb-6 p-4 rounded-md ${
+                submitMessage.includes('succès')
+                  ? 'bg-green-900 border border-green-600 text-green-200'
+                  : 'bg-red-900 border border-red-600 text-red-200'
+              }`}>
                 {submitMessage}
               </div>
             )}
