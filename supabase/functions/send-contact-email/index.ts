@@ -54,11 +54,9 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    console.log('Sending email to Resend API...');
-    
     const emailPayload = {
       from: 'Lokaz Contact <onboarding@resend.dev>',
-      to: ['legroupe@lokaz.net'],
+      to: ['orphybel@gmail.com'],
       subject: `Nouveau message de ${name}`,
       html: `
         <h2>Nouveau message de contact</h2>
@@ -71,8 +69,6 @@ Deno.serve(async (req: Request) => {
       `,
     };
 
-    console.log('Email payload:', JSON.stringify(emailPayload));
-
     const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -83,8 +79,6 @@ Deno.serve(async (req: Request) => {
     });
 
     const responseText = await emailResponse.text();
-    console.log('Resend API response status:', emailResponse.status);
-    console.log('Resend API response:', responseText);
 
     if (!emailResponse.ok) {
       console.error('Resend error - Status:', emailResponse.status);
