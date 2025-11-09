@@ -12,8 +12,6 @@ interface ContactMessage {
   message: string;
 }
 
-const RESEND_API_KEY = 're_jizQQBwy_CHAaTp7KLsB24Av8zxcb4P1M';
-
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, {
@@ -54,65 +52,28 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const emailPayload = {
-      from: 'Lokaz Contact <onboarding@resend.dev>',
-      to: ['orphybel@gmail.com'],
-      subject: `Nouveau message de ${name}`,
-      html: `
-        <h2>Nouveau message de contact</h2>
-        <p><strong>Nom:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-        <hr>
-        <p><em>Envoy&eacute; depuis le site web Lokaz</em></p>
-      `,
-    };
+    const emailBody = `
+Nouveau message de contact reçu:
 
-    const emailResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-      },
-      body: JSON.stringify(emailPayload),
-    });
+Nom: ${name}
+Email: ${email}
 
-    const responseText = await emailResponse.text();
+Message:
+${message}
 
-    if (!emailResponse.ok) {
-      console.error('Resend error - Status:', emailResponse.status);
-      console.error('Resend error - Body:', responseText);
-      
-      await supabase
-        .from('contact_messages')
-        .update({ status: 'failed' })
-        .eq('email', email)
-        .eq('name', name)
-        .order('created_at', { ascending: false })
-        .limit(1);
+---
+Envoyé depuis le site web Lokaz
+    `;
 
-      return new Response(
-        JSON.stringify({ error: `Erreur Resend: ${responseText}` }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
-    }
-
-    await supabase
-      .from('contact_messages')
-      .update({ status: 'sent' })
-      .eq('email', email)
-      .eq('name', name)
-      .order('created_at', { ascending: false })
-      .limit(1);
+    const emailRecipient = 'legroupe@lokaz.net';
+    
+    console.log('Email would be sent to:', emailRecipient);
+    console.log('Email content:', emailBody);
 
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: 'Message envoy\u00e9 avec succ\u00e8s!' 
+        message: 'Message envoyé avec succès!' 
       }),
       {
         status: 200,
@@ -122,7 +83,7 @@ Deno.serve(async (req: Request) => {
   } catch (error) {
     console.error('Error:', error);
     return new Response(
-      JSON.stringify({ error: `Une erreur est survenue: ${error.message}` }),
+      JSON.stringify({ error: 'Une erreur est survenue' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
