@@ -15,15 +15,16 @@ const ContactSection = () => {
     setIsSubmitting(true);
     setSubmitMessage('');
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const subject = encodeURIComponent(`Message de ${formData.name} depuis lokaz.net`);
+    const body = encodeURIComponent(
+      `Nom: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    );
+    const mailtoLink = `mailto:legroupe@lokaz.net?subject=${subject}&body=${body}`;
 
-    setSubmitMessage('Message envoyé avec succès ! Nous vous répondrons rapidement.');
+    window.location.href = mailtoLink;
+
     setFormData({ name: '', email: '', message: '' });
     setIsSubmitting(false);
-
-    setTimeout(() => {
-      setSubmitMessage('');
-    }, 5000);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
