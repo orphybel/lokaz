@@ -4,22 +4,22 @@ const VideosSection = () => {
 
   const videos = [
     {
-      title: 'OkaZ Millau 1 Août 2022 Proud Mary',
+      title: 'LokaZ Millau 1 Août 2022 Proud Mary',
       thumbnail: 'https://i.ytimg.com/vi/KBiUkjqczRY/hqdefault.jpg',
       videoId: 'KBiUkjqczRY',
     },
     {
-      title: 'OkaZ Millau 1 Août 2022 Hot Stuff',
+      title: 'LokaZ Millau 1 Août 2022 Hot Stuff',
       thumbnail: 'https://i.ytimg.com/vi/HBCz8yEM6LM/hqdefault.jpg',
       videoId: 'HBCz8yEM6LM',
     },
     {
-      title: 'OkaZ Millau 1 Août 2022 Crazon Espinado',
+      title: 'LokaZ Millau 1 Août 2022 Corazon Espinado',
       thumbnail: 'https://i.ytimg.com/vi/tOp3EK7AZbk/hqdefault.jpg',
       videoId: 'tOp3EK7AZbk',
     },
     {
-      title: 'OkaZ Millau 1 Août 2022 Baila Morena',
+      title: 'LokaZ Millau 1 Août 2022 Baila Morena',
       thumbnail: 'https://i.ytimg.com/vi/skIlb7jcl-E/hqdefault.jpg',
       videoId: 'skIlb7jcl-E',
     },
