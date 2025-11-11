@@ -1,30 +1,6 @@
-import { useState } from 'react';
-import { Mail, Phone, Send, Facebook } from 'lucide-react';
+import { Mail, Phone, Facebook } from 'lucide-react';
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const subject = `Message de ${formData.name}`;
-    const body = `Nom: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
-    const mailtoLink = `mailto:legroupe@lokaz.net?subject=${encodeURIComponent(subject)}&body=${body}`;
-
-    window.location.href = mailtoLink;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   return (
     <section id="contact" className="py-20 bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,124 +9,63 @@ const ContactSection = () => {
         </h2>
         <div className="w-24 h-1 bg-[#c0392b] mx-auto mb-12"></div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div>
-            <h3 className="text-2xl font-bold text-gray-100 mb-6">
-              Contactez-nous pour vos événements
-            </h3>
-            <p className="text-gray-300 mb-8">
-              Vous organisez un festival, un bal ou une soirée privée ?
-              N'hésitez pas à nous contacter pour discuter de votre projet. Nous serons ravis
-              de vous accompagner pour faire de votre événement un moment inoubliable.
-            </p>
+        <div className="max-w-3xl mx-auto">
+          <h3 className="text-2xl font-bold text-gray-100 mb-6 text-center">
+            Contactez-nous pour vos événements
+          </h3>
+          <p className="text-gray-300 mb-12 text-center">
+            Vous organisez un festival, un bal ou une soirée privée ?
+            N'hésitez pas à nous contacter pour discuter de votre projet. Nous serons ravis
+            de vous accompagner pour faire de votre événement un moment inoubliable.
+          </p>
 
-            <div className="space-y-6">
-              <div className="flex items-start">
-                <div className="bg-[#c0392b] bg-opacity-10 p-3 rounded-full mr-4">
-                  <Mail className="h-6 w-6 text-[#c0392b]" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-100 mb-1">Email</h4>
-                  <a
-                    href="mailto:legroupe@lokaz.net"
-                    className="text-[#c0392b] hover:text-[#a02e23] transition-colors"
-                  >
-                    legroupe@lokaz.net
-                  </a>
-                </div>
+          <div className="space-y-6">
+            <div className="flex items-start">
+              <div className="bg-[#c0392b] bg-opacity-10 p-3 rounded-full mr-4">
+                <Mail className="h-6 w-6 text-[#c0392b]" />
               </div>
-
-              <div className="flex items-start">
-                <div className="bg-[#c0392b] bg-opacity-10 p-3 rounded-full mr-4">
-                  <Phone className="h-6 w-6 text-[#c0392b]" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-100 mb-1">Téléphone</h4>
-                  <a
-                    href="tel:+33664913029"
-                    className="text-[#c0392b] hover:text-[#a02e23] transition-colors"
-                  >
-                    06.64.91.30.29
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="bg-[#c0392b] bg-opacity-10 p-3 rounded-full mr-4">
-                  <Facebook className="h-6 w-6 text-[#c0392b]" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-100 mb-1">Facebook</h4>
-                  <a
-                    href="https://www.facebook.com/legroupe.lokaz.7"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#c0392b] hover:text-[#a02e23] transition-colors inline-flex items-center"
-                  >
-                    Rejoignez-nous sur Facebook
-                  </a>
-                </div>
+              <div>
+                <h4 className="font-semibold text-gray-100 mb-1">Email</h4>
+                <a
+                  href="mailto:legroupe@lokaz.net"
+                  className="text-[#c0392b] hover:text-[#a02e23] transition-colors"
+                >
+                  legroupe@lokaz.net
+                </a>
               </div>
             </div>
-          </div>
 
-          <div className="bg-gray-700 rounded-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-100 mb-6">Envoyez-nous un message</h3>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2">
-                  Nom
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-600 rounded-md focus:ring-2 focus:ring-[#c0392b] focus:border-transparent outline-none transition-all bg-gray-800 text-gray-100"
-                />
+            <div className="flex items-start">
+              <div className="bg-[#c0392b] bg-opacity-10 p-3 rounded-full mr-4">
+                <Phone className="h-6 w-6 text-[#c0392b]" />
               </div>
-
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-600 rounded-md focus:ring-2 focus:ring-[#c0392b] focus:border-transparent outline-none transition-all bg-gray-800 text-gray-100"
-                />
+                <h4 className="font-semibold text-gray-100 mb-1">Téléphone</h4>
+                <a
+                  href="tel:+33664913029"
+                  className="text-[#c0392b] hover:text-[#a02e23] transition-colors"
+                >
+                  06.64.91.30.29
+                </a>
               </div>
+            </div>
 
+            <div className="flex items-start">
+              <div className="bg-[#c0392b] bg-opacity-10 p-3 rounded-full mr-4">
+                <Facebook className="h-6 w-6 text-[#c0392b]" />
+              </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-200 mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={6}
-                  className="w-full px-4 py-3 border border-gray-600 rounded-md focus:ring-2 focus:ring-[#c0392b] focus:border-transparent outline-none transition-all bg-gray-800 text-gray-100"
-                ></textarea>
+                <h4 className="font-semibold text-gray-100 mb-1">Facebook</h4>
+                <a
+                  href="https://www.facebook.com/legroupe.lokaz.7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#c0392b] hover:text-[#a02e23] transition-colors inline-flex items-center"
+                >
+                  Rejoignez-nous sur Facebook
+                </a>
               </div>
-
-              <button
-                type="submit"
-                className="w-full bg-[#c0392b] text-white px-6 py-3 rounded-md hover:bg-[#a02e23] transition-colors font-medium flex items-center justify-center"
-              >
-                <Send className="h-5 w-5 mr-2" />
-                Envoyer le message
-              </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
