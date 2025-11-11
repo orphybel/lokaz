@@ -1,0 +1,11 @@
+# robots.txt for L'OkaZ - Groupe de musique
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Sitemap
+Sitemap: https://www.lokaz.net/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
